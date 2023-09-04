@@ -1,13 +1,12 @@
-package com.example.Limitoffer.Services;
+package com.example.Limitoffer.service.LimitOffer;
 
 import com.example.Limitoffer.exception.LimitOfferException;
 import com.example.Limitoffer.dto.LimitOfferDTO;
 import com.example.Limitoffer.entity.Account;
 import com.example.Limitoffer.entity.LimitOfferDetails;
-import com.example.Limitoffer.repositories.AccountRepository;
-import com.example.Limitoffer.repositories.LimitOfferRepository;
+import com.example.Limitoffer.repository.AccountRepository;
+import com.example.Limitoffer.repository.LimitOfferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,19 +15,19 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class LimitOfferService {
+public class LimitOfferServiceImpl implements LimitOfferService{
 
     private final AccountRepository accountRepository;
 
     private final LimitOfferRepository limitOfferRepository;
 
     @Autowired
-    public LimitOfferService(AccountRepository accountRepository, LimitOfferRepository limitOfferRepository) {
+    public LimitOfferServiceImpl(AccountRepository accountRepository, LimitOfferRepository limitOfferRepository) {
         this.accountRepository = accountRepository;
         this.limitOfferRepository = limitOfferRepository;
     }
 
-
+    @Override
     public LimitOfferDetails createLimitOffer(LimitOfferDTO limitOfferDTO) {
         // Fetch the customer based on the accountId
         Optional<Account> optionalAccount = accountRepository.findById(limitOfferDTO.getAccountId());
@@ -57,30 +56,15 @@ public class LimitOfferService {
         return limitOfferRepository.save(limitOfferDetails);
     }
 
-    private static LimitOfferDetails getLimitOfferDetails(LimitOfferDTO limitOfferDTO, Account account) {
-        LocalDateTime currentTime = LocalDateTime.now();
-        LimitOfferDetails limitOfferDetails = new LimitOfferDetails();
-        limitOfferDetails.setAccountId(account.getAccountId());
-        limitOfferDetails.setLimitType(limitOfferDTO.getLimitType());
-        limitOfferDetails.setNewLimit(limitOfferDTO.getNewLimit());
 
-        if(limitOfferDTO.getOfferActivationTime()==null)
-            limitOfferDetails.setOfferActivationTime(currentTime);
-        else
-            limitOfferDetails.setOfferActivationTime(limitOfferDTO.getOfferActivationTime());
-
-        limitOfferDetails.setOfferExpiryTime(limitOfferDTO.getOfferExpiryTime());
-        limitOfferDetails.setStatus("PENDING");
-        return limitOfferDetails;
-    }
-
-
+    @Override
     public List<LimitOfferDetails> getLimitOffersByAccountId(Long accountId, LocalDateTime activeDate) {
 
         return limitOfferRepository.findByAccountIdAndStatusAndOfferExpiryTimeGreaterThanAndOfferActivationTimeLessThan(accountId,"PENDING",activeDate,activeDate);
     }
 
 
+    @Override
     public LimitOfferDetails updateLimit(Long offerId, String status) {
 
         LocalDateTime activeDate = LocalDateTime.now();
@@ -122,4 +106,26 @@ public class LimitOfferService {
 
         return updatedLimitOfferDetails;
     }
+
+
+    private static LimitOfferDetails getLimitOfferDetails(LimitOfferDTO limitOfferDTO, Account account) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        LimitOfferDetails limitOfferDetails = new LimitOfferDetails();
+        limitOfferDetails.setAccountId(account.getAccountId());
+        limitOfferDetails.setLimitType(limitOfferDTO.getLimitType());
+        limitOfferDetails.setNewLimit(limitOfferDTO.getNewLimit());
+
+        if(limitOfferDTO.getOfferActivationTime()==null)
+            limitOfferDetails.setOfferActivationTime(currentTime);
+        else
+            limitOfferDetails.setOfferActivationTime(limitOfferDTO.getOfferActivationTime());
+
+        limitOfferDetails.setOfferExpiryTime(limitOfferDTO.getOfferExpiryTime());
+        limitOfferDetails.setStatus("PENDING");
+        return limitOfferDetails;
+    }
+
 }
+
+
+

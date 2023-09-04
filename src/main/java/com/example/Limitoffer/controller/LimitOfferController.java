@@ -1,8 +1,8 @@
-package com.example.Limitoffer.Controllers;
+package com.example.Limitoffer.controller;
 
 import com.example.Limitoffer.dto.LimitOfferDTO;
-import com.example.Limitoffer.Services.LimitOfferService;
-import com.example.Limitoffer.entity.Account;
+import com.example.Limitoffer.service.LimitOffer.LimitOfferService;
+import com.example.Limitoffer.service.LimitOffer.LimitOfferServiceImpl;
 import com.example.Limitoffer.entity.LimitOfferDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class LimitOfferController {
     private final LimitOfferService limitOfferService;
 
     @Autowired
-    public LimitOfferController(LimitOfferService limitOfferService) {
+    public LimitOfferController(LimitOfferServiceImpl limitOfferService) {
         this.limitOfferService = limitOfferService;
     }
 

@@ -1,23 +1,26 @@
-package com.example.Limitoffer.Services;
+package com.example.Limitoffer.service.account;
 
 import com.example.Limitoffer.dto.CustomerDTO;
 import com.example.Limitoffer.entity.Account;
 import com.example.Limitoffer.entity.Customer;
-import com.example.Limitoffer.repositories.AccountRepository;
-import com.example.Limitoffer.repositories.CustomerRepository;
+import com.example.Limitoffer.exception.LimitOfferException;
+import com.example.Limitoffer.repository.AccountRepository;
+import com.example.Limitoffer.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
-public class CustomerAccountService {
+public class AccountServiceImpl implements AccountService{
 
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Override
     public Account createAccount(CustomerDTO customerDTO){
 
         //creating account with default limits as 100000 and 10000
@@ -45,5 +48,15 @@ public class CustomerAccountService {
 
 
         return account;
+    }
+
+    @Override
+    public Account getAccountById(Long accountId) {
+        Optional<Account> optionalAccount = accountRepository.findById(accountId);
+        if(optionalAccount.isEmpty())
+            throw new LimitOfferException("No account exist with given Account Id");
+
+        return optionalAccount.get();
+
     }
 }

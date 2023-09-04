@@ -1,43 +1,41 @@
-package com.example.Limitoffer.Controllers;
+package com.example.Limitoffer.controller;
 
-import com.example.Limitoffer.Services.CustomerAccountService;
+import com.example.Limitoffer.service.account.AccountService;
 import com.example.Limitoffer.dto.CustomerDTO;
-import com.example.Limitoffer.dto.LimitOfferDTO;
 import com.example.Limitoffer.entity.Account;
-import com.example.Limitoffer.repositories.AccountRepository;
+import com.example.Limitoffer.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/customer")
 public class CustomerAccountController {
 
-    @Autowired
-    private CustomerAccountService customerAccountService;
+
+    private final AccountService accountService;
 
     @Autowired
-    private AccountRepository customerRepository;
+    private AccountRepository accountRepository;
 
-    @GetMapping("/")
-    public ResponseEntity<String> sayhello(){
-        return ResponseEntity.status(HttpStatus.CREATED).body("hello!API is live");
+    @Autowired
+    public CustomerAccountController(AccountService accountService) {
+        this.accountService = accountService;
     }
+
+
     @PostMapping("/create-account")
     public ResponseEntity<Account> createAccount(@RequestBody CustomerDTO customerDTO) {
 
-            Account createdAccount = customerAccountService.createAccount(customerDTO);
+            Account createdAccount = accountService.createAccount(customerDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdAccount);
     }
 
     @GetMapping("/{accountId}")
     public ResponseEntity<Account> getAccountDetails(@PathVariable Long accountId){
-        Optional<Account> account = customerRepository.findById(accountId);
 
-        return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(accountService.getAccountById(accountId));
     }
 
 }

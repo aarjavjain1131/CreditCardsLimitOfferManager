@@ -1,4 +1,4 @@
-package com.example.Limitoffer.repositories;
+package com.example.Limitoffer.repository;
 
 import com.example.Limitoffer.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;

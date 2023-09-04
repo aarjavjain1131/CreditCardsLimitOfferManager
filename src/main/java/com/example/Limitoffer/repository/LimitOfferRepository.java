@@ -1,8 +1,7 @@
-package com.example.Limitoffer.repositories;
+package com.example.Limitoffer.repository;
 
 import com.example.Limitoffer.entity.LimitOfferDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;

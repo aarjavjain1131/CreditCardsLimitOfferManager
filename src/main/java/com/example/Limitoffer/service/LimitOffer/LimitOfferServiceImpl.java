@@ -36,18 +36,10 @@ public class LimitOfferServiceImpl implements LimitOfferService{
             throw new LimitOfferException("No account exist with the given accountId");
         Account account = optionalAccount.get();
 
-        if(limitOfferDTO.getOfferExpiryTime()==null||limitOfferDTO.getLimitType()==null||limitOfferDTO.getNewLimit()==null)
-            throw new LimitOfferException("Invalid Input: one or more field is null");
 
         //check if limits are more than current limits
         if((Objects.equals(limitOfferDTO.getLimitType(), "ACCOUNT_LIMIT") &&limitOfferDTO.getNewLimit()<=account.getAccountLimit())||(Objects.equals(limitOfferDTO.getLimitType(), "PER_TRANSACTION_LIMIT") &&limitOfferDTO.getNewLimit()<=account.getPerTransactionLimit()))
             throw new LimitOfferException("Invalid limits");
-
-        //check if expiry time greater than current time and activation time
-        LocalDateTime currentTime = LocalDateTime.now();
-
-        if(limitOfferDTO.getOfferExpiryTime().isBefore(limitOfferDTO.getOfferActivationTime())||limitOfferDTO.getOfferExpiryTime().isBefore(currentTime))
-            throw new LimitOfferException("Invalid offer expiry time");
 
         // create a limit offer entity
         LimitOfferDetails limitOfferDetails = getLimitOfferDetails(limitOfferDTO, account);

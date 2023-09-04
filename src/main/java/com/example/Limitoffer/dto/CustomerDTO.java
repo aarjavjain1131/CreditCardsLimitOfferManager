@@ -1,8 +1,16 @@
 package com.example.Limitoffer.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public class CustomerDTO {
 
+
+    @NotNull
     private String firstname;
+    @NotNull
+    private String lastname;
+    @NotNull
+    private Integer age;
 
     public String getFirstname() {
         return firstname;
@@ -28,6 +36,5 @@ public class CustomerDTO {
         this.age = age;
     }
 
-    private String lastname;
-    private Integer age;
+
 }

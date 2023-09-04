@@ -1,21 +1,24 @@
 package com.example.Limitoffer.dto;
 
-import jakarta.persistence.Column;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.springframework.boot.context.properties.bind.DefaultValue;
+import com.example.Limitoffer.util.ValidateLimitOfferDTO;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
+@ValidateLimitOfferDTO
 public class LimitOfferDTO {
 
-    @NotNull
+    @NotNull(message = "AccountId is required")
     private Long accountId;
 
+    @Pattern(regexp = "^(ACCOUNT_LIMIT|PER_TRANSACTION_LIMIT)$")
     private String limitType;
+    @NotNull
     private Long newLimit;
 
     private LocalDateTime offerActivationTime;
 
+    @NotNull
     private LocalDateTime offerExpiryTime;
 
     public Long getAccountId() {
